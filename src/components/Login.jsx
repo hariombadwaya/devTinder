@@ -9,6 +9,7 @@ const Login = () => {
  
   const [emailId , setEmailId]= useState("ym@gmail.com");
   const [password, setPassword] = useState("yuvraj@123");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
  
@@ -22,8 +23,13 @@ const Login = () => {
     dispatch(addUser(res.data));
     return navigate("/");
     }catch(err){
-      console.error(err);
-    }
+  const errorMessage =
+    err.response?.data?.error || 
+    err.response?.data?.message || 
+    "Something went wrong";
+
+  setError(errorMessage);
+}
   }
   return (
     <div className="flex items-center justify-center bg-base-200 flex-grow">
@@ -55,7 +61,7 @@ const Login = () => {
           placeholder="Enter your password"
           onChange={(e)=> setPassword(e.target.value)}
         />
-
+        <p className="text-red-500">{error}</p>
         <button className="btn btn-primary w-full mt-5" onClick={handleLogin}>
           Login
         </button>
